@@ -59,14 +59,23 @@ There is a i2c header but at this time the oled display was removed as it served
 
 # LED status
 
-normal operation is on for 250ms, off for 6s. Error states are indetified by a number of 250ms flashes followed by on for 3s off for 3s.  ^ == short flash -3s- == 3s on for 3 . _3s_ off for 3s. Cycle repeats after 6s
+normal operation is on for 250ms, off for 6s. Error states are indetified by a number of 250ms flashes followed by on for 3s off for 3s.
+
+## Key
+
+* ^ == short flash 
+* -3s- == 3s on for 3s
+* _3s_ off for 3s. 
+* Cycle repeats after 6s
+
 
 |   flashes   | condition                                   |
-|+++++++++++++|+++++++++++++++++++++++++++++++++++++++++++++|
+|-------------|---------------------------------------------|
 | ^           | normal                                      |
 | ^^ -3s-     | INA219 chip failure                         |
 | ^^^ -s3-    | Can bus not connected or failing to respond |
 | ^^^^^ -s3-  | Both Can and INA219 failing                 |
+
 
 # ToDo
 
@@ -74,5 +83,6 @@ normal operation is on for 250ms, off for 6s. Error states are indetified by a n
 * [x] Average current and voltage over time period, eg 30s
 * [ ] Test CAN using a CandelLite adapter.
 * [x] Calibrate NTC sensors.
-* [x] --Add 1.3 inch Oled display--
-* [ ] Implement current monitoring with auto scaling for different ranges using features of the INA219
+* [x] ~~Add 1.3 inch Oled display~~
+* [x] ~~Implement current monitoring with auto scaling for different ranges using features of the INA219~~ Limited benefit see p21 Table 7
+* [ ] design and make box

@@ -61,7 +61,9 @@ class N2kShunt : public SNMEA2000 {
         const unsigned long *tx,
         const unsigned long *rx,
         const uint8_t csPin
-        ): SNMEA2000{addr, devInfo, pinfo, cinfo, tx, rx, csPin} {};
+        ): SNMEA2000{addr, devInfo, pinfo, cinfo, tx, rx, csPin} {
+
+      };
 
     /**
      * DC Battery Status PGN 127508
@@ -82,12 +84,13 @@ class N2kShunt : public SNMEA2000 {
         );
 
     /**
+     * requestMessageHeader is the ISO request, or null if there was none.
      * batteryInstance starting a 0
      * batteryType default 2, 0 = flooded, 1 = Gel, 2 = AGM, 3 = unknown
      * supportsEqual default 0, 0 = no, 1 = yes, 2 = Error, 3 = Unavailable.
      * nominalVoltage default 1, 1 = 12v, 2= 24v, 3 = 32v, 4 = 62v, 5 = 42v, 6 = 48v.
      * batterChemistry 
-     * batteryCapacity in Coulombs multiply Ah by 0.000277778 to get Coulmbs
+     * batteryCapacity in C  1Ah == 3600C
      * batteryTemperatureCoeficient in percent, signed int
      * peukert Peurket exponent calculated from datasheet 1.10-1.25 for lead acid
      * chargeEfficiencyFactor in percent, signed int
@@ -103,6 +106,7 @@ class N2kShunt : public SNMEA2000 {
      * see https://canboat.github.io/canboat/canboat.html for additional details 
      */ 
     void sendBatteryConfigurationStatusMessage(
+            MessageHeader *requestMessageHeader,
             uint8_t batteryInstance = 0, 
             uint8_t batteryType = 2, 
             uint8_t supportsEqual = 0,
@@ -136,8 +140,6 @@ class N2kShunt : public SNMEA2000 {
             double capacity = SNMEA2000::n2kDoubleNA);
 
 
-    private:
-        void output1ByteUDouble(double value, double precision, double undefValue);
 
 };
 

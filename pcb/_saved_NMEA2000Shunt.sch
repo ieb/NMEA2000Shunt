@@ -378,7 +378,7 @@ Text GLabel 5600 4200 2    60   Output ~ 0
 MOSI
 Text GLabel 5600 4050 2    60   Input ~ 0
 MISO
-Text GLabel 3500 3900 0    60   Output ~ 0
+Text GLabel 3500 4050 0    60   Output ~ 0
 CANCS
 Text GLabel 5600 4500 2    60   Output ~ 0
 SCL
@@ -539,7 +539,7 @@ Text GLabel 5700 6350 2    60   BiDi ~ 0
 IN+
 Text GLabel 5700 6450 2    60   BiDi ~ 0
 IN-
-Text GLabel 3500 4050 0    60   Input ~ 0
+Text GLabel 3500 3900 0    60   Input ~ 0
 TEMP1
 Text GLabel 3500 4200 0    60   Output ~ 0
 LED
@@ -715,4 +715,6 @@ Text GLabel 3900 2600 0    60   UnSpc ~ 0
 CANGND
 Text GLabel 1550 6800 2    60   UnSpc ~ 0
 CANGND
+Text Notes 4250 3550 0    60   ~ 0
+CanCS on PA4 does not work for some reason,\nedges very slopey.\nPA5 is fine, edges vertical.
 $EndSCHEMATC

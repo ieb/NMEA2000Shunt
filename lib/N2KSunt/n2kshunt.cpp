@@ -1,18 +1,6 @@
 #include "n2kshunt.h"
 
 
-// should really be in SmallNMEA2000
-void N2kShunt::output1ByteUDouble(double value, double precision, double undefValue) {
-    if (value == undefValue) {
-        outputByte(0xff);
-    } else {
-        double vd=value/precision;
-        vd = round(vd);
-        uint8_t i = (vd>=0 && vd<0xfe)?(uint8_t)vd:0xfe;
-        outputByte(i);
-    }
-
-}
 
 
 void N2kShunt::sendDCBatterStatusMessage(
@@ -23,6 +11,7 @@ void N2kShunt::sendDCBatterStatusMessage(
     double batteryCurrent // A
     ) {
     MessageHeader messageHeader(127508L, 6, getAddress(), SNMEA2000::broadcastAddress);
+    // single frame message
     startPacket(&messageHeader);
     outputByte(batteryInstance);  
     output2ByteUDouble(batteryVoltage,0.01); // might be unsigned, canbot says unsigned.
@@ -33,37 +22,50 @@ void N2kShunt::sendDCBatterStatusMessage(
 }
 
 
-
+/**
+ * There is some confusion over the length of this message.
+ * CanBoat says its a 10byte fast packet https://github.com/canboat/canboat/issues/316
+ * NMEA2000 libraries say its an 8 byte packet, https://github.com/ttlappalainen/NMEA2000/blob/master/src/N2kMessages.cpp#L793
+ * The CanBoat code has had more work done on it and is more recent therfore I am defaulting to that
+ */
 
 void N2kShunt::sendBatteryConfigurationStatusMessage(
+	MessageHeader *requestMessageHeader,
     uint8_t batteryInstance, 
     uint8_t batteryType, // 0 = flooded, 1 = Gel, 2 = AGM, 3 = unknown
     uint8_t supportsEqual, // 0 = no, 1 = yes, 2 = Error, 3 = Unavailable.
     uint8_t nominalVoltage, // 0 = 6v, 1 = 12v, 2= 24v, 3 = 32v, 4 = 62v, 5 = 42v, 6 = 48v.
     uint8_t batteryChemistry, // 0 = LeadAcid, 1 = LiIon, 2 = NiCd, 3 = Zn0, 4 = NiMh
-    double batteryCapacity, // in Coulombs 
+    double batteryCapacity, // in C  
     int8_t batteryTemperatureCoeficient, // 0-5% in 10s, 100 for 50 for Lipo 
     double peukert, // typically 1.25 for leadAcid adn 1.05 for LiPo.
     int8_t chargeEfficiencyFactor // in percent 95 for leadAcid,  99 for lipo.
 	) {
-	MessageHeader messageHeader(127513L, 6, getAddress(), SNMEA2000::broadcastAddress);
-    startPacket(&messageHeader);
+	uint8_t target = SNMEA2000::broadcastAddress;
+	if ( requestMessageHeader != NULL ) {
+		target = requestMessageHeader->source;
+	}
+	MessageHeader messageHeader(127513L, 6, getAddress(), target);
+	// 127513L defaults to Fast packet messages
+    startFastPacket(&messageHeader, 8);
+
     outputByte(batteryInstance);  
     // xxSSTTTT  xx=reserved, SS=supports, TTTT=batteryType
-    outputByte(0x0C | ((supportsEqual & 0x0f)<<4) | (batteryType&0x0f)); 
+    outputByte(0xC0 | ((supportsEqual & 0x0f)<<4) | (batteryType&0x0f)); 
     // ccccvvvv cccc=chemistry, vvvv=nominal voltage.
     outputByte(((batteryChemistry & 0x0f) << 4) | (nominalVoltage & 0x0f));
-    // as amper seconds.
-    output2ByteUDouble(batteryCapacity, 3600); 
+    output2ByteUDouble(batteryCapacity, 3600 ); // send in Ah not C, if it was C then 300Ah is > 1E6 C which doesnt fit in 16bits.
     outputByte(0xff&batteryTemperatureCoeficient);  // as signed int bits
     if ( peukert<1 || peukert > 1.505) { 
     	outputByte(0xff); 
     } else {
     	// 8 bit unsigned, 1-1.506 === 0-253
-    	output1ByteUDouble(peukert-1,0.002,-1);
+    	// or 1 bit == 0.002 with an offset of 500.
+    	outputByte(0xff&((int)(peukert/0.002)-500));
     }
     outputByte(0xff&chargeEfficiencyFactor); // as signed int bits
-    finishPacket();
+    finishFastPacket();
+
 }
 
 // need to send this when requested.
@@ -77,10 +79,11 @@ void N2kShunt::sendDCDetailedStatusMessage(
     uint8_t stateOfHealth, // % state of health
     double timeRemaining, // time remaining in seconds
     double rippleVoltage, // ripple voltage in V
-    double capacity
+    double capacity // in C
 	) {
 	MessageHeader messageHeader(127506L, 6, getAddress(), SNMEA2000::broadcastAddress);
-    startPacket(&messageHeader);
+	// fast packet message
+    startFastPacket(&messageHeader,11);
     outputByte(sid);  
     outputByte(batteryInstance);  
     outputByte(dcType);
@@ -89,8 +92,7 @@ void N2kShunt::sendDCDetailedStatusMessage(
     output2ByteUDouble(timeRemaining,60);
     output2ByteUDouble(rippleVoltage,0.001);
     output2ByteUDouble(capacity,3600);
-    finishPacket();
-
+    finishFastPacket();
 }
 
 

@@ -12,8 +12,8 @@
 
 // Hardware
 // Vcc chip pin 1
-#define CANCS_PIN PIN_PA4 // chip pin 2
-#define TEMP1_PIN PIN_PA5 // chip pin 3
+#define TEMP1_PIN PIN_PA4 // chip pin 2
+#define CANCS_PIN PIN_PA5 // chip pin 3
 #define LED_PIN PIN_PA6 // chip pin 4
 // PIN_PA7 not used       // chip pin 5
 #define RX0_PIN   PIN_PB3 // chip pin 6, default
@@ -93,48 +93,51 @@ N2kShunt n2kShunt = N2kShunt(DEVICE_ADDRESS,
           &rxPGN[0],
           CANCS_PIN
 );
+//          CANCS_PIN
 
 
-void blink(int blinkDelay) {
+void blink() {
 	static unsigned long lastBlink = 0;
 	static uint8_t led_state = 0;
+	static unsigned long nextDelay = 3000;
 	unsigned long now = millis();
-	if ((now - lastBlink) > blinkDelay ) {
-
-
+	if ((now - lastBlink) > nextDelay ) {
 		led_state = !led_state;
 		digitalWrite(LED_PIN, led_state);
-		if ( !led_state ) {
-			if ( canOk && ina219Ok ) {
-				delay(250);  // normal running one short flash every 6s.
-				digitalWrite(LED_PIN, HIGH);
+		if ( canOk && ina219Ok ) {
+			if (!led_state) {
+				// short bink dont block main thread.
+				nextDelay = 250;
 			} else {
-				// indicate a fault condition.
-				// 3 flashes = can fail.
-				// 2 flashes = ina219 fail.
-				// 5 flashes == both failed.
-				if (!canOk ) {
-					for(int i = 0; i < 3; i++) {
-						delay(250);
-						digitalWrite(LED_PIN, HIGH);
-						delay(250);
-						digitalWrite(LED_PIN, LOW);
-					}
-				} 
-				if (!ina219Ok) {
-					for(int i = 0; i < 2; i++) {
-						delay(250);
-						digitalWrite(LED_PIN, HIGH);
-						delay(250);
-						digitalWrite(LED_PIN, LOW);
-					}
-				}
-			    delay(250);
-				digitalWrite(LED_PIN, HIGH);
-			    delay(250);
-				digitalWrite(LED_PIN, LOW);
-
+				nextDelay = 6000;
 			}
+		} else if ( !led_state ) {
+			nextDelay = 3000;
+			// indicate a fault condition.
+			// its ok to block the main thread as something is failing.
+			// 3 flashes = can fail.
+			// 2 flashes = ina219 fail.
+			// 5 flashes == both failed.
+			if (!canOk ) {
+				for(int i = 0; i < 3; i++) {
+					delay(250);
+					digitalWrite(LED_PIN, HIGH);
+					delay(250);
+					digitalWrite(LED_PIN, LOW);
+				}
+			} 
+			if (!ina219Ok) {
+				for(int i = 0; i < 2; i++) {
+					delay(250);
+					digitalWrite(LED_PIN, HIGH);
+					delay(250);
+					digitalWrite(LED_PIN, LOW);
+				}
+			}
+		    delay(250);
+			digitalWrite(LED_PIN, HIGH);
+		    delay(250);
+			digitalWrite(LED_PIN, LOW);
 		}
 		lastBlink = millis();
 
@@ -183,16 +186,37 @@ void sendReading() {
 	}
 }
 
-
-bool isoRequestHandler(unsigned long requestedPGN, MessageHeader *messageHeader, byte * buffer, int len) {
-	if ( requestedPGN == 127513L ) {
+void sendBatteryConfigurationStatus() {
+	static unsigned long lastSend = 0;
+	unsigned long now = millis();
+	if ((now - lastSend) > 15000 ) {
+		lastSend = now;
 		n2kShunt.sendBatteryConfigurationStatusMessage(
+			NULL,
 			settings.config.batteryInstance,
 			settings.config.batteryType,
 			settings.config.supportsEqualisation,
 			settings.config.nominalVoltage,
 			settings.config.batteryChemistry,
-			settings.config.batteryCapacityAh*0.000277778,
+			settings.config.batteryCapacityAh * 3600.0,
+			settings.config.batteryTemperatureCoeficient,
+			settings.config.peukert,
+			settings.config.chargeEfficiencyFactor);
+	}		
+
+}
+
+
+bool isoRequestHandler(unsigned long requestedPGN, MessageHeader *messageHeader, byte * buffer, int len) {
+	if ( requestedPGN == 127513L ) {
+		n2kShunt.sendBatteryConfigurationStatusMessage(
+			messageHeader,
+			settings.config.batteryInstance,
+			settings.config.batteryType,
+			settings.config.supportsEqualisation,
+			settings.config.nominalVoltage,
+			settings.config.batteryChemistry,
+			settings.config.batteryCapacityAh * 3600.0,
 			settings.config.batteryTemperatureCoeficient,
 			settings.config.peukert,
 			settings.config.chargeEfficiencyFactor);		
@@ -217,12 +241,12 @@ void setup() {
   debug.println(F("NMEA2000 Shunt - Booting....."));
 
   if ( ina219.begin() != I2C_OK) {
-  	ina219Ok = true;
+  	ina219Ok = false;
 	debug.print(F("Failed to find INA219 chip, error:"));
 	debug.println(ina219.getError());
  	debug.println(F("INA219 not responding"));
   } else {
-  	ina219Ok = false;
+  	ina219Ok = true;
   }
 
   commandLine.setCallbacks(&showStatus, &readSensors);
@@ -242,16 +266,17 @@ void setup() {
   ina219.setShutRange( settings.config.shuntReading, settings.config.shuntCurrent);
 
   debug.println(F("Opening CAN"));
+  debug.print("CS Pin in main ");debug.println(CANCS_PIN);
   // only set on reboot.
   n2kShunt.setSerialNumber(settings.config.serialNumber);
   n2kShunt.setDeviceAddress(settings.config.deviceAddress);
   n2kShunt.setIsoRequestHandler(&isoRequestHandler);
   if ( !n2kShunt.open() ) {
-  	canOk = true;
-    debug.println(F("Failed to start NMEA2000, retry in 5s"));
-    //delay(5000);
-  } else {
   	canOk = false;
+    debug.println(F("Failed to start NMEA2000, retry in 5s"));
+    delay(5000);
+  } else {
+  	canOk = true;
   }
   debug.println(F("Opened, MCP2515 Operational"));
   debug.println(F("Running..."));
@@ -266,8 +291,12 @@ void setup() {
 void loop() {
   static bool diagnosticsEnabled = false;
   
-  blink(3000);
+  if ( !canOk ) {
+  	canOk = n2kShunt.open();
+  };
+  blink();
   sendReading();
+  sendBatteryConfigurationStatus();
   n2kShunt.processMessages();
   if ( commandLine.checkCommand() ) {
   	if (!diagnosticsEnabled ) {

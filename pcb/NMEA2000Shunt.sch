@@ -378,7 +378,7 @@ Text GLabel 5600 4200 2    60   Output ~ 0
 MOSI
 Text GLabel 5600 4050 2    60   Input ~ 0
 MISO
-Text GLabel 3500 3900 0    60   Output ~ 0
+Text GLabel 3500 4050 0    60   Output ~ 0
 CANCS
 Text GLabel 5600 4500 2    60   Output ~ 0
 SCL
@@ -425,12 +425,12 @@ Text GLabel 1550 6900 2    60   Input ~ 0
 $Comp
 L GND #PWR06
 U 1 1 62C251B0
-P 1950 7000
-F 0 "#PWR06" H 1950 7000 30  0001 C CNN
-F 1 "GND" H 1950 6930 30  0001 C CNN
-F 2 "" H 1950 7000 60  0001 C CNN
-F 3 "" H 1950 7000 60  0001 C CNN
-	1    1950 7000
+P 4000 3250
+F 0 "#PWR06" H 4000 3250 30  0001 C CNN
+F 1 "GND" H 4000 3180 30  0001 C CNN
+F 2 "" H 4000 3250 60  0001 C CNN
+F 3 "" H 4000 3250 60  0001 C CNN
+	1    4000 3250
 	1    0    0    -1  
 $EndComp
 Text GLabel 5700 6550 2    60   BiDi ~ 0
@@ -450,7 +450,7 @@ L CONN_5 P102
 U 1 1 62C279DC
 P 1200 4200
 F 0 "P102" V 1150 4200 50  0000 C CNN
-F 1 "CONN_5" V 1250 4200 50  0000 C CNN
+F 1 "Prog" V 1250 4200 50  0000 C CNN
 F 2 "Pin_Headers:Pin_Header_Straight_1x05" H 1200 4200 60  0001 C CNN
 F 3 "" H 1200 4200 60  0001 C CNN
 	1    1200 4200
@@ -519,22 +519,18 @@ F 3 "" H 5700 6750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1950 7000 1950 6800
-Wire Wire Line
-	1950 6800 1550 6800
-Wire Wire Line
 	5350 1850 6750 1850
 Wire Wire Line
 	6750 1850 6750 1800
 Wire Wire Line
 	6750 1400 6750 1150
 $Comp
-L INA219-module U?
+L INA219-module U104
 U 1 1 6448C178
 P 5100 6600
-F 0 "U?" H 5100 6600 60  0000 C CNN
+F 0 "U104" H 5100 6600 60  0000 C CNN
 F 1 "INA219-module" H 5100 6600 60  0000 C CNN
-F 2 "" H 5100 6600 60  0001 C CNN
+F 2 "Divers:INA219Module" H 5100 6600 60  0001 C CNN
 F 3 "" H 5100 6600 60  0001 C CNN
 	1    5100 6600
 	1    0    0    -1  
@@ -543,15 +539,15 @@ Text GLabel 5700 6350 2    60   BiDi ~ 0
 IN+
 Text GLabel 5700 6450 2    60   BiDi ~ 0
 IN-
-Text GLabel 3500 4050 0    60   Input ~ 0
+Text GLabel 3500 3900 0    60   Input ~ 0
 TEMP1
 Text GLabel 3500 4200 0    60   Output ~ 0
 LED
 $Comp
-L R R?
+L R R103
 U 1 1 6448D116
 P 2900 6600
-F 0 "R?" V 2980 6600 40  0000 C CNN
+F 0 "R103" V 2980 6600 40  0000 C CNN
 F 1 "10K" V 2907 6601 40  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" V 2830 6600 30  0001 C CNN
 F 3 "" H 2900 6600 30  0000 C CNN
@@ -559,10 +555,10 @@ F 3 "" H 2900 6600 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R?
+L R R104
 U 1 1 6448D260
 P 3450 6600
-F 0 "R?" V 3530 6600 40  0000 C CNN
+F 0 "R104" V 3530 6600 40  0000 C CNN
 F 1 "10K" V 3457 6601 40  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSoldering" V 3380 6600 30  0001 C CNN
 F 3 "" H 3450 6600 30  0000 C CNN
@@ -577,61 +573,28 @@ Text GLabel 3450 6350 2    60   Input ~ 0
 5V
 Wire Wire Line
 	3450 6350 2900 6350
-$Comp
-L CONN_1 P?
-U 1 1 6448D572
-P 1250 6100
-F 0 "P?" H 1330 6100 40  0000 L CNN
-F 1 "CONN_1" H 1250 6155 30  0001 C CNN
-F 2 "" H 1250 6100 60  0001 C CNN
-F 3 "" H 1250 6100 60  0001 C CNN
-	1    1250 6100
-	-1   0    0    -1  
-$EndComp
-$Comp
-L CONN_1 P?
-U 1 1 6448D5EA
-P 1250 6200
-F 0 "P?" H 1330 6200 40  0000 L CNN
-F 1 "CONN_1" H 1250 6255 30  0001 C CNN
-F 2 "" H 1250 6200 60  0001 C CNN
-F 3 "" H 1250 6200 60  0001 C CNN
-	1    1250 6200
-	-1   0    0    -1  
-$EndComp
-$Comp
-L CONN_1 P?
-U 1 1 6448D640
-P 1250 6300
-F 0 "P?" H 1330 6300 40  0000 L CNN
-F 1 "CONN_1" H 1250 6355 30  0001 C CNN
-F 2 "" H 1250 6300 60  0001 C CNN
-F 3 "" H 1250 6300 60  0001 C CNN
-	1    1250 6300
-	-1   0    0    -1  
-$EndComp
-Text GLabel 1400 6100 2    60   BiDi ~ 0
+Text GLabel 1550 5600 2    60   BiDi ~ 0
 IN+
-Text GLabel 1400 6200 2    60   BiDi ~ 0
+Text GLabel 1550 5700 2    60   BiDi ~ 0
 IN-
 $Comp
-L GND #PWR?
+L GND #PWR010
 U 1 1 6448D721
-P 1400 6300
-F 0 "#PWR?" H 1400 6300 30  0001 C CNN
-F 1 "GND" H 1400 6230 30  0001 C CNN
-F 2 "" H 1400 6300 60  0001 C CNN
-F 3 "" H 1400 6300 60  0001 C CNN
-	1    1400 6300
+P 1550 5800
+F 0 "#PWR010" H 1550 5800 30  0001 C CNN
+F 1 "GND" H 1550 5730 30  0001 C CNN
+F 2 "" H 1550 5800 60  0001 C CNN
+F 3 "" H 1550 5800 60  0001 C CNN
+	1    1550 5800
 	-1   0    0    -1  
 $EndComp
 $Comp
-L CONN_4 P?
+L CONN_4 P105
 U 1 1 6448D7CD
 P 1200 7300
-F 0 "P?" V 1150 7300 50  0000 C CNN
+F 0 "P105" V 1150 7300 50  0000 C CNN
 F 1 "OLED" V 1250 7300 50  0000 C CNN
-F 2 "Connect:bornier4" H 1200 7300 60  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" H 1200 7300 60  0001 C CNN
 F 3 "" H 1200 7300 60  0001 C CNN
 	1    1200 7300
 	-1   0    0    1   
@@ -641,10 +604,10 @@ SDA
 Text GLabel 1550 7250 2    60   BiDi ~ 0
 SCL
 $Comp
-L GND #PWR?
+L GND #PWR011
 U 1 1 6448D8EF
 P 1550 7350
-F 0 "#PWR?" H 1550 7350 30  0001 C CNN
+F 0 "#PWR011" H 1550 7350 30  0001 C CNN
 F 1 "GND" H 1550 7280 30  0001 C CNN
 F 2 "" H 1550 7350 60  0001 C CNN
 F 3 "" H 1550 7350 60  0001 C CNN
@@ -654,12 +617,12 @@ $EndComp
 Text GLabel 1550 7450 2    60   Input ~ 0
 5V
 $Comp
-L CONN_2 P?
+L CONN_2 P101
 U 1 1 6448DB6A
 P 1200 5050
-F 0 "P?" V 1150 5050 40  0000 C CNN
+F 0 "P101" V 1150 5050 40  0000 C CNN
 F 1 "Temp1" V 1250 5050 40  0000 C CNN
-F 2 "" H 1200 5050 60  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 1200 5050 60  0001 C CNN
 F 3 "" H 1200 5050 60  0001 C CNN
 	1    1200 5050
 	-1   0    0    1   
@@ -667,46 +630,22 @@ $EndComp
 Text GLabel 1550 4950 2    60   Output ~ 0
 TEMP1
 $Comp
-L CONN_2 P?
-U 1 1 6448DC32
-P 1200 5450
-F 0 "P?" V 1150 5450 40  0000 C CNN
-F 1 "Temp2" V 1250 5450 40  0000 C CNN
-F 2 "" H 1200 5450 60  0001 C CNN
-F 3 "" H 1200 5450 60  0001 C CNN
-	1    1200 5450
-	-1   0    0    1   
-$EndComp
-Text GLabel 1550 5350 2    60   Output ~ 0
-TEMP2
-$Comp
-L GND #PWR?
+L GND #PWR012
 U 1 1 6448DD33
 P 1550 5150
-F 0 "#PWR?" H 1550 5150 30  0001 C CNN
+F 0 "#PWR012" H 1550 5150 30  0001 C CNN
 F 1 "GND" H 1550 5080 30  0001 C CNN
 F 2 "" H 1550 5150 60  0001 C CNN
 F 3 "" H 1550 5150 60  0001 C CNN
 	1    1550 5150
 	1    0    0    -1  
 $EndComp
-$Comp
-L GND #PWR?
-U 1 1 6448DD8C
-P 1550 5550
-F 0 "#PWR?" H 1550 5550 30  0001 C CNN
-F 1 "GND" H 1550 5480 30  0001 C CNN
-F 2 "" H 1550 5550 60  0001 C CNN
-F 3 "" H 1550 5550 60  0001 C CNN
-	1    1550 5550
-	1    0    0    -1  
-$EndComp
 Connection ~ 3000 3750
 $Comp
-L GND #PWR?
+L GND #PWR013
 U 1 1 6448E6C2
 P 3000 4150
-F 0 "#PWR?" H 3000 4150 30  0001 C CNN
+F 0 "#PWR013" H 3000 4150 30  0001 C CNN
 F 1 "GND" H 3000 4080 30  0001 C CNN
 F 2 "" H 3000 4150 60  0001 C CNN
 F 3 "" H 3000 4150 60  0001 C CNN
@@ -714,14 +653,68 @@ F 3 "" H 3000 4150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D?
+L LED D101
 U 1 1 644D43C8
 P 3450 7050
-F 0 "D?" H 3450 7150 50  0000 C CNN
+F 0 "D101" H 3450 7150 50  0000 C CNN
 F 1 "LED" H 3450 6950 50  0000 C CNN
-F 2 "" H 3450 7050 60  0000 C CNN
+F 2 "LEDs:LED_0805" H 3450 7050 60  0001 C CNN
 F 3 "" H 3450 7050 60  0000 C CNN
 	1    3450 7050
 	0    1    1    0   
 $EndComp
+$Comp
+L CONN_3 K101
+U 1 1 644D4D79
+P 1200 5700
+F 0 "K101" V 1150 5700 50  0000 C CNN
+F 1 "Battery" V 1250 5700 40  0000 C CNN
+F 2 "Connect:bornier3" H 1200 5700 60  0001 C CNN
+F 3 "" H 1200 5700 60  0001 C CNN
+	1    1200 5700
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R105
+U 1 1 644E00AC
+P 4150 2900
+F 0 "R105" V 4230 2900 40  0000 C CNN
+F 1 "10K" V 4157 2901 40  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4080 2900 30  0001 C CNN
+F 3 "" H 4150 2900 30  0000 C CNN
+	1    4150 2900
+	1    0    0    -1  
+$EndComp
+Text Notes 750  3450 0    60   ~ 0
+The aim of this board is to measure \nthe battery at its terminals so it needs\nto be using a reference gnd connection \nof the negative terminal of the battery. \nFor this reason the CAN GND is isolated \nby a resistor ensure its not connected \ndirectly to the battery GND as there may \nbe small constant volage differences \nbetween the 2 and we dont want the \nCAN GND to become the boad GND \nsupply line carying significant current.  
+$Comp
+L C C107
+U 1 1 644E044D
+P 3900 2900
+F 0 "C107" H 3900 3000 40  0000 L CNN
+F 1 "100nF" H 3906 2815 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0805" H 3938 2750 30  0001 C CNN
+F 3 "" H 3900 2900 60  0000 C CNN
+	1    3900 2900
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3900 2700 3900 2600
+Wire Wire Line
+	3900 2600 4150 2600
+Wire Wire Line
+	4150 2600 4150 2650
+Wire Wire Line
+	3900 3150 4150 3150
+Wire Wire Line
+	3900 3150 3900 3100
+Wire Wire Line
+	4000 3150 4000 3250
+Connection ~ 4000 3150
+Text GLabel 3900 2600 0    60   UnSpc ~ 0
+CANGND
+Text GLabel 1550 6800 2    60   UnSpc ~ 0
+CANGND
+Text Notes 4250 3550 0    60   ~ 0
+CanCS on PA4 does not work for some reason,\nedges very slopey.\nPA5 is fine, edges vertical.
 $EndSCHEMATC

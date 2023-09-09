@@ -35,7 +35,7 @@ class ConfigSettings {
             eeprom_read_block((void*)&epromConfig, (const void*)0, sizeof(Config));
             uint16_t crcv =  modbus_crc16((uint8_t *)&config, sizeof(Config)-2);
             if ( crcv == epromConfig.crc ) {
-                memcpy(&epromConfig, &config, sizeof(Config));
+                memcpy( &config, &epromConfig, sizeof(Config));
                 return true;
             }
             return false;

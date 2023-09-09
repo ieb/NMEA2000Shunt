@@ -545,8 +545,8 @@ Text GLabel 5700 6450 2    60   BiDi ~ 0
 IN-
 Text GLabel 3500 4050 0    60   Input ~ 0
 TEMP1
-Text GLabel 3500 4200 0    60   Input ~ 0
-TEMP2
+Text GLabel 3500 4200 0    60   Output ~ 0
+LED
 $Comp
 L R R?
 U 1 1 6448D116
@@ -571,8 +571,8 @@ F 3 "" H 3450 6600 30  0000 C CNN
 $EndComp
 Text GLabel 2900 6850 0    60   Output ~ 0
 TEMP1
-Text GLabel 3450 6850 0    60   Output ~ 0
-TEMP2
+Text GLabel 3450 7250 0    60   Input ~ 0
+LED
 Text GLabel 3450 6350 2    60   Input ~ 0
 5V
 Wire Wire Line
@@ -712,5 +712,16 @@ F 2 "" H 3000 4150 60  0001 C CNN
 F 3 "" H 3000 4150 60  0001 C CNN
 	1    3000 4150
 	1    0    0    -1  
+$EndComp
+$Comp
+L LED D?
+U 1 1 644D43C8
+P 3450 7050
+F 0 "D?" H 3450 7150 50  0000 C CNN
+F 1 "LED" H 3450 6950 50  0000 C CNN
+F 2 "" H 3450 7050 60  0000 C CNN
+F 3 "" H 3450 7050 60  0000 C CNN
+	1    3450 7050
+	0    1    1    0   
 $EndComp
 $EndSCHEMATC
